@@ -1,0 +1,48 @@
+<div class="container">
+  <h2>Crear cuenta</h2>
+
+  <input 
+    type="text" 
+    [(ngModel)]="nombre" 
+    placeholder="Nombre completo"
+  />
+
+  <input 
+    type="email" 
+    [(ngModel)]="email" 
+    placeholder="Correo electrónico"
+  />
+
+  <input 
+    type="password" 
+    [(ngModel)]="password" 
+    placeholder="Contraseña"
+  />
+
+  <!-- 👇 NUEVO CAMPO -->
+  <input 
+    type="password" 
+    [(ngModel)]="confirmPassword" 
+    placeholder="Confirmar contraseña"
+  />
+
+  <!-- 👇 BOTÓN MEJORADO -->
+  <button 
+    (click)="register()" 
+    [disabled]="!nombre || !email || !password || !confirmPassword"
+  >
+    Registrarse
+  </button>
+
+  <!-- 👇 MENSAJE CON ERROR -->
+  <p 
+    class="mensaje" 
+    [class.error]="mensaje.includes('no coinciden')"
+  >
+    {{ mensaje }}
+  </p>
+
+  <button class="secondary" (click)="goToLogin()">
+    Ya tengo cuenta
+  </button>
+</div>
