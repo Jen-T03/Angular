@@ -1,51 +1,46 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; // <-- necesario para usar [(ngModel)]
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   imports: [FormsModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css'],
+  styleUrl: './register.component.css',
 })
 export class RegisterComponent {
+// Propiedades enlazadas con el HTML mediante Two-way Binding [(ngModel)]
   nombre: string = '';
   email: string = '';
   password: string = '';
-  confirmPassword: string = ''; // 👈 FALTABA ESTO
+  confirmPassword: string = '';
   mensaje: string = '';
+  exito: boolean = false; // controla el color del mensaje y si mostrar el botón de login
 
-  constructor(private router: Router) {}
+  // Inyección de dependencias: Router para navegar, AuthService para registrar usuarios
+  constructor(private router: Router, private authService: AuthService) {}
 
   register() {
-    // Validación campos vacíos
-    if (!this.nombre || !this.email || !this.password || !this.confirmPassword) {
-      this.mensaje = 'Por favor completa todos los campos.';
-      return;
-    }
-
-    // 👇 VALIDACIÓN CLAVE
+    // Validación: las contraseñas deben coincidir antes de intentar registrar
     if (this.password !== this.confirmPassword) {
       this.mensaje = 'Las contraseñas no coinciden.';
+      this.exito = false;
       return;
     }
 
-    const usuario = {
-      nombre: this.nombre,
-      email: this.email,
-      password: this.password,
-    };
-
-    localStorage.setItem('usuario', JSON.stringify(usuario));
-
-    this.mensaje = 'Registro exitoso';
-
-    setTimeout(() => {
-      this.router.navigate(['/login']);
-    }, 1500);
+    // Se delega el registro al AuthService - retorna true si se registró, false si el email ya existe
+    const ok = this.authService.register(this.nombre, this.email, this.password);
+    if (ok) {
+      this.mensaje = `¡Registro exitoso! Bienvenido, ${this.nombre}.`;
+      this.exito = true;
+    } else {
+      this.mensaje = 'Ese email ya está registrado.';
+      this.exito = false;
+    }
   }
 
+  // Navega a /login usando el Router (programmatic navigation)
   goToLogin() {
     this.router.navigate(['/login']);
   }

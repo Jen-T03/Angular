@@ -1,48 +1,39 @@
 <div class="container">
-  <h2>Crear cuenta</h2>
+  <div class="card">
+    <h1>Crear Cuenta</h1>
 
-  <input 
-    type="text" 
-    [(ngModel)]="nombre" 
-    placeholder="Nombre completo"
-  />
+    <div class="campo">
+      <label>Nombre:</label>
+      <input type="text" [(ngModel)]="nombre" placeholder="Tu nombre" />
+    </div>
 
-  <input 
-    type="email" 
-    [(ngModel)]="email" 
-    placeholder="Correo electrónico"
-  />
+    <div class="campo">
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="email" placeholder="correo@mail.com" />
+    </div>
 
-  <input 
-    type="password" 
-    [(ngModel)]="password" 
-    placeholder="Contraseña"
-  />
+    <div class="campo">
+      <label>Contraseña:</label>
+      <input type="password" [(ngModel)]="password" placeholder="Mínimo 4 caracteres" />
+    </div>
 
-  <!-- 👇 NUEVO CAMPO -->
-  <input 
-    type="password" 
-    [(ngModel)]="confirmPassword" 
-    placeholder="Confirmar contraseña"
-  />
+    <div class="campo">
+      <label>Confirmar Contraseña:</label>
+      <input type="password" [(ngModel)]="confirmPassword" placeholder="Repetí tu contraseña" />
+    </div>
 
-  <!-- 👇 BOTÓN MEJORADO -->
-  <button 
-    (click)="register()" 
-    [disabled]="!nombre || !email || !password || !confirmPassword"
-  >
-    Registrarse
-  </button>
+    <button
+      (click)="register()"
+      [disabled]="nombre === '' || email === '' || password === '' || confirmPassword === ''">
+      Registrarse
+    </button>
 
-  <!-- 👇 MENSAJE CON ERROR -->
-  <p 
-    class="mensaje" 
-    [class.error]="mensaje.includes('no coinciden')"
-  >
-    {{ mensaje }}
-  </p>
+    @if (mensaje !== '') {
+      <p [class]="exito ? 'mensaje exito' : 'mensaje error'">{{ mensaje }}</p>
+    }
 
-  <button class="secondary" (click)="goToLogin()">
-    Ya tengo cuenta
-  </button>
+    @if (exito) {
+      <button class="btn-login" (click)="goToLogin()">Ir al Login</button>
+    }
+  </div>
 </div>
